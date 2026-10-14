@@ -1,0 +1,14 @@
+{
+  "name": "political-sandbox",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node build.js",
+    "dev": "node build.js",
+    "build": "node build.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
