@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Политическая песочница — симулятор</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <meta property="og:image" content="https://bolt.new/static/og_default.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://bolt.new/static/og_default.png">
+</head>
+<body>
+  <div id="app">
+    <!-- TOP BAR -->
+    <header class="top-bar">
+      <div class="date-display">
+        <span class="date-label" id="dateLabel">Дата</span>
+        <span class="date-value" id="dateValue">День 1 · Янв 2026</span>
+      </div>
+      <div class="speed-controls">
+        <button class="ctrl-btn" id="btnPause" title="Пауза">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+          <span>Пауза</span>
+        </button>
+        <button class="ctrl-btn active" id="btnPlay" title="1x">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          <span>1x</span>
+        </button>
+        <button class="ctrl-btn" id="btnFast" title="3x">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M4 5v14l8-7zM12 5v14l8-7z"/></svg>
+          <span>3x</span>
+        </button>
+        <button class="ctrl-btn next-day" id="btnNextDay" title="След. день">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+          <span>След. день</span>
+        </button>
+        <button class="ctrl-btn lang-btn" id="btnLang" title="EN / RU">
+          <span id="langLabel">RU</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- STATS BAR -->
+    <section class="stats-bar" id="statsBar"></section>
+
+    <!-- ECON BAR -->
+    <section class="econ-bar" id="econBar"></section>
+
+    <!-- TAB NAV -->
+    <nav class="tab-nav">
+      <button class="tab-btn active" data-tab="overview">Обзор</button>
+      <button class="tab-btn" data-tab="economy">Экономика</button>
+      <button class="tab-btn" data-tab="parliament">Парламент</button>
+      <button class="tab-btn" data-tab="characters">Деятели</button>
+    </nav>
+
+    <!-- TAB CONTENT -->
+    <main class="tab-content">
+      <div class="tab-pane active" id="tab-overview">
+        <div class="overview-grid">
+          <div class="stats-detail-panel" id="statsDetail"></div>
+          <div class="quick-info-panel" id="quickInfo"></div>
+          <div class="quick-info-panel" id="traitImpact"></div>
+        </div>
+      </div>
+
+      <div class="tab-pane" id="tab-economy">
+        <div class="parliament-header">
+          <h2>Экономическая панель</h2>
+          <p class="subtle">Управление налоговой политикой и распределением госбюджета.</p>
+        </div>
+
+        <div class="econ-section">
+          <div class="econ-section-title">
+            <h3 id="taxSectionTitle">Налоговая политика</h3>
+          </div>
+          <div id="taxPanel"></div>
+        </div>
+
+        <div class="econ-section">
+          <div class="econ-section-title">
+            <h3 id="budgetSectionTitle">Распределение госбюджета</h3>
+          </div>
+          <div id="budgetPanel"></div>
+        </div>
+      </div>
+
+      <div class="tab-pane" id="tab-parliament">
+        <div class="parliament-header">
+          <h2>Законодательство</h2>
+          <p class="subtle">Предложите закон для голосования в парламенте.</p>
+        </div>
+        <div class="law-list" id="lawList"></div>
+        <div class="vote-result" id="voteResult" style="display:none"></div>
+      </div>
+
+      <div class="tab-pane" id="tab-characters">
+        <div class="parliament-header">
+          <h2>Ключевые фигуры</h2>
+          <p class="subtle">Политики, министры и лидеры оппозиции.</p>
+        </div>
+        <div class="character-list" id="characterList"></div>
+      </div>
+    </main>
+
+    <!-- EVENT LOG -->
+    <section class="event-log" id="eventLog">
+      <div class="log-header">
+        <h3>Журнал событий</h3>
+        <button class="log-clear" id="logClear">Очистить</button>
+      </div>
+      <div class="log-entries" id="logEntries"></div>
+    </section>
+
+    <!-- TRAIT MODAL -->
+    <div class="trait-modal-overlay" id="traitModal">
+      <div class="trait-modal">
+        <div class="trait-modal-header">
+          <h3 id="traitModalTitle">Черта</h3>
+          <button class="trait-modal-close" onclick="closeTraitModal()">&times;</button>
+        </div>
+        <div class="trait-modal-body">
+          <p class="trait-modal-desc" id="traitModalDesc"></p>
+          <div class="trait-modal-section-title">Числовые эффекты (в день)</div>
+          <div class="trait-modal-effects" id="traitModalEffects"></div>
+          <div class="trait-modal-section-title">Фигуры с этой чертой</div>
+          <div class="trait-modal-holders" id="traitModalHolders"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
